@@ -143,7 +143,6 @@ def draw_graphs(fig, axs, info, idx, X, y, X_norm, y_norm):
     return [l1, l2, l3, l4, l5]
 
 def graph_it(info, X, y, X_norm, y_norm):
-    print([i for i in range(5)])
     plt.style.use("seaborn-v0_8-whitegrid")
     fig, axs = plt.subplots(2,2)
     for i in range(3):
@@ -190,23 +189,15 @@ def load_file(filename: str) -> ([float], [float]):
     return (X, y)
 
 
-#def load_model() -> (float, float):
-#    """
-#    loads the model.
-#    raises exception if not valid.
-#    returns (0, 0) if doesn't exist
-#    returns slope, intercept if succeeded
-#    """
-#    try:
-#        with open("model.sav", "r") as file:
-#            saved_model = json.load(file)
-#            slope = saved_model["slope"]
-#            intercept = saved_model["intercept"]
-#            return (float(slope), float(intercept))
-#    except FileNotFoundError:
-#        return (0, 0)
-#    except Exception:
-#        raise ValueError("Invalid model file")
+def save_model(info):
+    """
+    saves the model.
+    """
+    try:
+        with open("model.sav", "w") as file:
+            json.dump(info, file)
+    except Exception:
+        raise ValueError("Could not save into file")
            
 
 def validate_arguments() -> float:
@@ -227,7 +218,8 @@ def main():
         info = gradient_descent(X_norm, y_norm)
         result = info[-1]
         print(result['theta0'], result['theta1'])
-        graph_it(info, X, y, X_norm, y_norm)
+        save_model(result)
+        #graph_it(info, X, y, X_norm, y_norm)
 
     except (AssertionError, ValueError) as error:
         print("Error:", error)
