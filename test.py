@@ -15,8 +15,8 @@ def load_model() -> (float, float):
     try:
         with open("model.sav", "r") as file:
             saved_model = json.load(file)
-            slope = saved_model["slope"]
-            intercept = saved_model["intercept"]
+            slope = saved_model["theta1"]
+            intercept = saved_model["theta0"]
             return (float(slope), float(intercept))
     except FileNotFoundError:
         return (0, 0)
@@ -37,15 +37,19 @@ def input_loop(slope: float, intercept: float):
     """validates user input, returning its value as float if valid"""
     try:
         mileage = float(input("Type in the car mileage: "))
-        print("The predicted price is:", intercept + slope * mileage)
+        if mileage < 0:
+            raise AssertionError("Input must be positive")
+        result = intercept + slope * mileage
+        print("The predicted price is:", '$%.2f' % result if result > 0 else 0.00)
+    except AssertionError as error:
+        print(error)
     except Exception:
         print("Could not convert input to float")
-
+    input_loop(slope, intercept)
 
 
 def validate_arguments() -> float:
     """no arguments must be passed"""
-    val = 0.0
     if (len(sys.argv) > 1):
         raise AssertionError("Too many arguments")
 
@@ -53,7 +57,7 @@ def validate_arguments() -> float:
 def signal_handler(sig, frame):
     """signal handler for CTRL+C"""
     print("\nExiting...")
-    sys.exit(0)
+    exit(0)
 
 
 # MAIN
@@ -66,7 +70,7 @@ def main():
         input_loop(slope, intercept)
     except (AssertionError, ValueError) as error:
         print("Error:", error)
-        if type(error) == AssertionError:
+        if type(error) is AssertionError:
             usage()
         exit(1)
 
