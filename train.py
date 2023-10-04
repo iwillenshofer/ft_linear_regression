@@ -192,7 +192,7 @@ def display_infos(info, X, y, X_norm, y_norm):
     print(f"Learning Rate: {LEARNING_RATE}")
     print(f"𝜃₁: {info[-1]['otheta1']}")
     print(f"𝜃₀: {info[-1]['otheta0']}")
-    print(f"iterations: {len(info)}")
+    print(f"Iterations: {len(info)}")
     print(f"Residual StdDev: {residual_stdev(y, pred_y)}")
     print(f"R²: {coefficient_of_determination(y, pred_y)}")
 
