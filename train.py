@@ -5,7 +5,7 @@ import csv
 import warnings
 import matplotlib.pyplot as plt
 
-LEARNING_RATE = .1
+LEARNING_RATE = .01
 ITERATIONS = 100000
 FEATURE = 'km'
 LABEL = 'price'
@@ -26,10 +26,8 @@ def coefficient_of_determination(y, y_pred):
 
 def residual_stdev(y, y_pred):
     """calculates the residual standard deviation"""
-    residuals = [(y[i] - y_pred[i]) for i, _ in enumerate(y)]
-    mean_residual = sum(residuals) / len(y)
-    return (sum([(i - mean_residual) ** 2 for i in residuals])
-            / (len(y) - 1)) ** .5
+    residuals = sum([(y[i] - y_pred[i]) ** 2 for i, _ in enumerate(y)])
+    return (residuals / (len(y) - 2)) ** .5
 
 
 def mean(lst: [float]):
